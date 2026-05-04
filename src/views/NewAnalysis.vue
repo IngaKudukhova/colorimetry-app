@@ -1,58 +1,69 @@
 <template>
   <div class="page">
-    <h1>Новый анализ</h1>
+    <div v-if="!analysisDone">
+      <h1>Новый анализ</h1>
 
-    <div class="form-block">
-      <label>Выберите вещество</label>
+      <div class="form-block">
+        <label>Выберите вещество</label>
 
-      <v-select
-        :options="substances"
-        label="name"
-        v-model="selectedSubstance"
-        placeholder="Начните вводить название..."
-      />
+        <v-select
+          :options="substances"
+          label="name"
+          v-model="selectedSubstance"
+          placeholder="Начните вводить название..."
+        />
+      </div>
+
+      <ImageUploader title="Реакция 1" @rgbCalculated="setRGB1" />
+
+      <ImageUploader title="Реакция 2" @rgbCalculated="setRGB2" />
+
+      <div v-if="rgb1 && rgb2">
+        <h2>RGB параметры</h2>
+
+        <p>R1: {{ rgb1.r }}</p>
+        <p>G1: {{ rgb1.g }}</p>
+        <p>B1: {{ rgb1.b }}</p>
+        <div
+          class="color-preview"
+          :style="{ background: `rgb(${rgb1.r},${rgb1.g},${rgb1.b})` }"
+        ></div>
+
+        <p>R2: {{ rgb2.r }}</p>
+        <p>G2: {{ rgb2.g }}</p>
+        <p>B2: {{ rgb2.b }}</p>
+        <div
+          class="color-preview"
+          :style="{ background: `rgb(${rgb2.r},${rgb2.g},${rgb2.b})` }"
+        ></div>
+      </div>
+      <p v-if="errorMessage" class="error">
+        {{ errorMessage }}
+      </p>
+
+      <button type="button" @click="runAnalysis">Провести анализ</button>
     </div>
 
-    <ImageUploader title="Реакция 1" @rgbCalculated="setRGB1" />
-
-    <ImageUploader title="Реакция 2" @rgbCalculated="setRGB2" />
-
-    <div v-if="rgb1 && rgb2">
-      <h2>RGB параметры</h2>
-
-      <p>R1: {{ rgb1.r }}</p>
-      <p>G1: {{ rgb1.g }}</p>
-      <p>B1: {{ rgb1.b }}</p>
-      <div
-        class="color-preview"
-        :style="{ background: `rgb(${rgb1.r},${rgb1.g},${rgb1.b})` }"
-      ></div>
-
-      <p>R2: {{ rgb2.r }}</p>
-      <p>G2: {{ rgb2.g }}</p>
-      <p>B2: {{ rgb2.b }}</p>
-      <div
-        class="color-preview"
-        :style="{ background: `rgb(${rgb2.r},${rgb2.g},${rgb2.b})` }"
-      ></div>
+    <!-- ЭКРАН 2 -->
+    <div v-else>
+      <h2>Результаты анализа</h2>
 
       <RadarChart :values="chartValues" />
-    </div>
-    <p v-if="errorMessage" class="error">
-      {{ errorMessage }}
-    </p>
-
-    <button type="button" @click="runAnalysis">Провести анализ</button>
-
-    <div v-if="area">
-      <h2>Результаты анализа</h2>
 
       <p>Площадь: {{ area.toFixed(2) }}</p>
       <p>Периметр: {{ perimeter.toFixed(2) }}</p>
 
-      <p>Концентрация (по площади): {{ concentrationArea?.toFixed(3) }} г/л</p>
+      <p>
+        Концентрация (по площади):
+        {{ concentrationArea?.toFixed(3) }} г/л
+      </p>
 
-      <p>Концентрация (по периметру): {{ concentrationPerimeter?.toFixed(3) }} г/л</p>
+      <p>
+        Концентрация (по периметру):
+        {{ concentrationPerimeter?.toFixed(3) }} г/л
+      </p>
+
+      <button @click="resetAnalysis">Новый анализ</button>
     </div>
   </div>
 </template>
@@ -101,6 +112,8 @@ function runAnalysis() {
   errorMessage.value = ''
 
   calculateResults()
+
+  analysisDone.value = true
 }
 
 function calculateArea(values) {
@@ -200,5 +213,22 @@ function calculateResults() {
 
   concentrationArea.value = result.c_area
   concentrationPerimeter.value = result.c_perimeter
+}
+
+const analysisDone = ref(false)
+
+function resetAnalysis() {
+  analysisDone.value = false
+
+  rgb1.value = null
+  rgb2.value = null
+
+  area.value = null
+  perimeter.value = null
+
+  concentrationArea.value = null
+  concentrationPerimeter.value = null
+
+  selectedSubstance.value = null
 }
 </script>
