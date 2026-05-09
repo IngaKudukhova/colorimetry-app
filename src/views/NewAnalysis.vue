@@ -63,26 +63,34 @@
         {{ concentrationPerimeter?.toFixed(3) }} г/л
       </p>
 
+      <button @click="saveAnalysis">Сохранить результат</button>
+
       <button @click="resetAnalysis">Новый анализ</button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+
+import axios from 'axios'
 
 import ImageUploader from '../components/ImageUploader.vue'
 import RadarChart from '../components/RadarChart.vue'
 
-const substances = ref([
-  { id: 1, name: 'Парацетамол' },
-  { id: 2, name: 'Инсулин' },
-  { id: 3, name: 'Глицин' },
-  { id: 4, name: 'Резорцин' },
-  { id: 5, name: 'Инфезол' },
-])
+const substances = ref([])
 
 const selectedSubstance = ref(null)
+
+onMounted(async () => {
+  try {
+    const response = await axios.get('http://localhost:3000/substances')
+
+    substances.value = response.data
+  } catch (error) {
+    console.log(error)
+  }
+})
 
 const rgb1 = ref(null)
 const rgb2 = ref(null)
@@ -230,5 +238,35 @@ function resetAnalysis() {
   concentrationPerimeter.value = null
 
   selectedSubstance.value = null
+}
+
+async function saveAnalysis() {
+  try {
+    const analysisData = {
+      substance: selectedSubstance.value.name,
+
+      rgb1: rgb1.value,
+
+      rgb2: rgb2.value,
+
+      area: area.value,
+
+      perimeter: perimeter.value,
+
+      concentrationArea: concentrationArea.value,
+
+      concentrationPerimeter: concentrationPerimeter.value,
+    }
+
+    const response = await axios.post('http://localhost:3000/analyses', analysisData)
+
+    alert('Анализ сохранён')
+
+    console.log(response.data)
+  } catch (error) {
+    console.log(error)
+
+    alert('Ошибка сохранения')
+  }
 }
 </script>
