@@ -1,10 +1,24 @@
 <template>
-  <div id="app">
-    <router-view />
+  <div>
+    <Navbar v-if="showNavbar" />
+
+    <RouterView />
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { computed } from 'vue'
+
+import { useRoute } from 'vue-router'
+
+import Navbar from './components/Navbar.vue'
+
+const route = useRoute()
+
+const showNavbar = computed(() => {
+  return route.path !== '/login'
+})
+</script>
 
 <style>
 body {

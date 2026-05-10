@@ -32,7 +32,12 @@
         г/л
       </p>
 
-      <button @click="deleteAnalysis(analysis._id)">Удалить</button>
+      <button
+        v-if="currentUser && currentUser.role === 'admin'"
+        @click="deleteAnalysis(analysis._id)"
+      >
+        Удалить
+      </button>
     </div>
   </div>
 </template>
@@ -43,6 +48,7 @@ import { ref, onMounted } from 'vue'
 import axios from 'axios'
 
 const analyses = ref([])
+const currentUser = JSON.parse(localStorage.getItem('user') || 'null')
 
 async function loadAnalyses() {
   try {

@@ -6,6 +6,7 @@ const cors = require('cors')
 
 const substanceRoutes = require('./routes/substanceRoutes')
 const analysisRoutes = require('./routes/analysisRoutes')
+const authRoutes = require('./routes/authRoutes')
 
 const app = express()
 
@@ -30,6 +31,8 @@ async function startServer() {
     await mongoose.connect(process.env.MONGO_URI)
 
     console.log('MongoDB connected')
+
+    app.use('/auth', authRoutes)
 
     app.listen(PORT, () => {
       console.log(`Server started on port ${PORT}`)
