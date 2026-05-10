@@ -1,3 +1,5 @@
+const { calculateAnalysis } = require('../controllers/analysisController')
+
 const express = require('express')
 
 const router = express.Router()
@@ -45,5 +47,7 @@ router.delete('/:id', async (req, res) => {
     })
   }
 })
+
+router.post('/calculate', calculateAnalysis)
 
 module.exports = router

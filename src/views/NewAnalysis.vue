@@ -111,7 +111,7 @@ const chartValues = computed(() => {
 
 const errorMessage = ref('')
 
-function runAnalysis() {
+async function runAnalysis() {
   if (!selectedSubstance.value) {
     errorMessage.value = 'Пожалуйста, выберите вещество'
     return
@@ -119,91 +119,9 @@ function runAnalysis() {
 
   errorMessage.value = ''
 
-  calculateResults()
+  await calculateResults()
 
   analysisDone.value = true
-}
-
-function calculateArea(values) {
-  const sin60 = Math.sin(Math.PI / 3)
-
-  let sum = 0
-
-  for (let i = 0; i < values.length; i++) {
-    const current = values[i]
-    const next = values[(i + 1) % values.length]
-
-    sum += current * next
-  }
-
-  return 0.5 * sin60 * sum
-}
-
-function calculatePerimeter(values) {
-  let sum = 0
-
-  for (let i = 0; i < values.length; i++) {
-    const r1 = values[i]
-    const r2 = values[(i + 1) % values.length]
-
-    const angle = Math.PI / 3
-
-    const side = Math.sqrt(r1 * r1 + r2 * r2 - 2 * r1 * r2 * Math.cos(angle))
-
-    sum += side
-  }
-
-  return sum
-}
-
-function calculateConcentration(S, P, substance) {
-  let c_area = null
-  let c_perimeter = null
-
-  switch (substance.name) {
-    case 'Парацетамол':
-      c_area = (12847 - S) / 12590
-      c_perimeter = (580.1 - P) / 377.5
-
-      break
-
-    case 'Инсулин':
-      c_area = (7580.7 - S) / 1976.5
-      c_perimeter = (492.49 - P) / 90.033
-
-      break
-
-    case 'Глицин':
-      c_area = Math.pow(S / 11999, 1 / 0.3281)
-      c_perimeter = Math.pow(P / 425.92, 1 / -0.147)
-
-      break
-
-    case 'Резорцин':
-      c_area = solveQuadratic(S, -204890, 92330, 26197)
-      c_perimeter = solveQuadratic(P, -2716.2, 1356.7, 654.09)
-
-      break
-
-    case 'Инфезол':
-      c_area = -Math.log(S / 53393) / 1.294
-      c_perimeter = -Math.log(P / 885.11) / 0.558
-
-      break
-  }
-
-  return { c_area, c_perimeter }
-}
-
-function solveQuadratic(y, a, b, c) {
-  const D = b * b - 4 * a * (c - y)
-
-  if (D < 0) return null
-
-  const x1 = (-b + Math.sqrt(D)) / (2 * a)
-  const x2 = (-b - Math.sqrt(D)) / (2 * a)
-
-  return Math.max(x1, x2)
 }
 
 const area = ref(null)
@@ -211,16 +129,30 @@ const perimeter = ref(null)
 const concentrationArea = ref(null)
 const concentrationPerimeter = ref(null)
 
-function calculateResults() {
-  const values = chartValues.value
+async function calculateResults() {
+  try {
+    const response = await axios.post(
+      'http://localhost:3000/analyses/calculate',
 
-  area.value = calculateArea(values)
-  perimeter.value = calculatePerimeter(values)
+      {
+        rgb1: rgb1.value,
 
-  const result = calculateConcentration(area.value, perimeter.value, selectedSubstance.value)
+        rgb2: rgb2.value,
 
-  concentrationArea.value = result.c_area
-  concentrationPerimeter.value = result.c_perimeter
+        substance: selectedSubstance.value.name,
+      },
+    )
+
+    area.value = response.data.area
+
+    perimeter.value = response.data.perimeter
+
+    concentrationArea.value = response.data.concentrationArea
+
+    concentrationPerimeter.value = response.data.concentrationPerimeter
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 const analysisDone = ref(false)

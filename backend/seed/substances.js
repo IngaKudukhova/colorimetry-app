@@ -2,14 +2,14 @@ module.exports = [
   {
     name: 'Парацетамол',
 
-    area: {
+    areaEquation: {
       type: 'linear',
       a: -12590,
       b: 12847,
       r2: 0.9933,
     },
 
-    perimeter: {
+    perimeterEquation: {
       type: 'linear',
       a: -377.5,
       b: 580.1,
@@ -20,14 +20,14 @@ module.exports = [
   {
     name: 'Инсулин',
 
-    area: {
+    areaEquation: {
       type: 'linear',
       a: -1976.5,
       b: 7580.7,
       r2: 0.9771,
     },
 
-    perimeter: {
+    perimeterEquation: {
       type: 'linear',
       a: -90.033,
       b: 492.49,
@@ -38,14 +38,14 @@ module.exports = [
   {
     name: 'Глицин',
 
-    area: {
+    areaEquation: {
       type: 'power',
       a: 11999,
       b: 0.3281,
       r2: 0.9877,
     },
 
-    perimeter: {
+    perimeterEquation: {
       type: 'power',
       a: 425.92,
       b: -0.147,
@@ -56,16 +56,16 @@ module.exports = [
   {
     name: 'Резорцин',
 
-    area: {
-      type: 'polynomial2',
+    areaEquation: {
+      type: 'polynomial',
       a: -204890,
       b: 92330,
       c: 26197,
       r2: 0.9999,
     },
 
-    perimeter: {
-      type: 'polynomial2',
+    perimeterEquation: {
+      type: 'polynomial',
       a: -2716.2,
       b: 1356.7,
       c: 654.09,
@@ -76,14 +76,14 @@ module.exports = [
   {
     name: 'Инфезол',
 
-    area: {
+    areaEquation: {
       type: 'exponential',
       a: 53393,
       b: -1.294,
       r2: 0.9985,
     },
 
-    perimeter: {
+    perimeterEquation: {
       type: 'exponential',
       a: 885.11,
       b: -0.558,
