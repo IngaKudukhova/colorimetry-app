@@ -73,7 +73,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 
-import axios from 'axios'
+import api from '../services/api'
 
 import ImageUploader from '../components/ImageUploader.vue'
 import RadarChart from '../components/RadarChart.vue'
@@ -84,7 +84,7 @@ const selectedSubstance = ref(null)
 
 onMounted(async () => {
   try {
-    const response = await axios.get('http://localhost:3000/substances')
+    const response = await api.get('http://localhost:3000/substances')
 
     substances.value = response.data
   } catch (error) {
@@ -131,7 +131,7 @@ const concentrationPerimeter = ref(null)
 
 async function calculateResults() {
   try {
-    const response = await axios.post(
+    const response = await api.post(
       'http://localhost:3000/analyses/calculate',
 
       {
@@ -190,7 +190,7 @@ async function saveAnalysis() {
       concentrationPerimeter: concentrationPerimeter.value,
     }
 
-    const response = await axios.post('http://localhost:3000/analyses', analysisData)
+    const response = await api.post('http://localhost:3000/analyses', analysisData)
 
     alert('Анализ сохранён')
 

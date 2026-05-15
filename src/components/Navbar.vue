@@ -2,8 +2,9 @@
   <nav class="navbar">
     <div class="left">
       <RouterLink to="/new-analysis"> Новый анализ </RouterLink>
-
       <RouterLink to="/history"> История </RouterLink>
+      <RouterLink v-if="user.role === 'admin'" to="/admin/substances"> Вещества </RouterLink>
+      <RouterLink v-if="user.role === 'admin'" to="/admin/users"> Пользователи </RouterLink>
     </div>
 
     <div class="right">

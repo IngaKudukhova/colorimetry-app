@@ -1,5 +1,7 @@
 require('dotenv').config()
 
+const userRoutes = require('./routes/userRoutes')
+
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
@@ -25,6 +27,8 @@ app.get('/health', (req, res) => {
 app.use('/substances', substanceRoutes)
 
 app.use('/analyses', analysisRoutes)
+
+app.use('/users', userRoutes)
 
 async function startServer() {
   try {

@@ -19,7 +19,7 @@
 <script setup>
 import { ref } from 'vue'
 
-import axios from 'axios'
+import api from '../services/api'
 
 import { useRouter } from 'vue-router'
 
@@ -33,7 +33,7 @@ const errorMessage = ref('')
 
 async function login() {
   try {
-    const response = await axios.post(
+    const response = await api.post(
       'http://localhost:3000/auth/login',
 
       {

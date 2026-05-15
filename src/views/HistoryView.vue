@@ -45,14 +45,14 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 
-import axios from 'axios'
+import api from '../services/api'
 
 const analyses = ref([])
 const currentUser = JSON.parse(localStorage.getItem('user') || 'null')
 
 async function loadAnalyses() {
   try {
-    const response = await axios.get('http://localhost:3000/analyses')
+    const response = await api.get('http://localhost:3000/analyses')
 
     analyses.value = response.data
   } catch (error) {
@@ -62,7 +62,7 @@ async function loadAnalyses() {
 
 async function deleteAnalysis(id) {
   try {
-    await axios.delete(`http://localhost:3000/analyses/${id}`)
+    await api.delete(`http://localhost:3000/analyses/${id}`)
 
     analyses.value = analyses.value.filter((analysis) => analysis._id !== id)
   } catch (error) {
