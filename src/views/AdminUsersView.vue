@@ -26,6 +26,10 @@
       <p v-if="errorMessage" class="error">
         {{ errorMessage }}
       </p>
+
+      <p v-if="errorMessage2" class="error">
+        {{ errorMessage2 }}
+      </p>
     </div>
 
     <hr />
@@ -85,6 +89,8 @@ const successMessage = ref('')
 
 const errorMessage = ref('')
 
+const errorMessage2 = ref('')
+
 const form = reactive({
   username: '',
 
@@ -127,18 +133,24 @@ async function createUser() {
 
 async function removeUser(id) {
   try {
-    await api.delete(`http://localhost:3000/users/${id}`)
+    errorMessage2.value = ''
+
+    await api.delete(`/users/${id}`)
 
     loadUsers()
   } catch (error) {
     console.log(error)
+
+    errorMessage2.value = error.response.data.message
   }
 }
 
 async function updateRole(id, role) {
   try {
+    errorMessage2.value = ''
+
     await api.put(
-      `http://localhost:3000/users/${id}`,
+      `/users/${id}`,
 
       { role },
     )
@@ -146,6 +158,10 @@ async function updateRole(id, role) {
     loadUsers()
   } catch (error) {
     console.log(error)
+
+    errorMessage2.value = error.response.data.message
+
+    loadUsers()
   }
 }
 
@@ -180,6 +196,11 @@ onMounted(() => {
 input,
 select {
   padding: 10px;
+  background-color: white;
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px white inset;
 }
 
 button {
@@ -188,7 +209,7 @@ button {
 
 .users-table {
   width: 100%;
-
+  background-color: white;
   border-collapse: collapse;
 
   margin-top: 20px;

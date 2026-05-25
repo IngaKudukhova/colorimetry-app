@@ -68,7 +68,7 @@ router.delete(
 
         if (adminCount === 1) {
           return res.status(400).json({
-            message: 'Cannot delete last admin',
+            message: 'Нельзя удалить последнего администратора',
           })
         }
       }
@@ -108,7 +108,7 @@ router.put(
 
         if (adminCount === 1) {
           return res.status(400).json({
-            message: 'Cannot change role of last admin',
+            message: 'Нельзя изменить роль последнего администратора',
           })
         }
       }

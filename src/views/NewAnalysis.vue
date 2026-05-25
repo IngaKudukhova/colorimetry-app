@@ -9,39 +9,58 @@
         <v-select
           :options="substances"
           label="name"
+          class="form-text"
           v-model="selectedSubstance"
           placeholder="Начните вводить название..."
         />
       </div>
+      <div class="image-uploder">
+        <ImageUploader title="Реакция 1" @rgbCalculated="setRGB1" />
 
-      <ImageUploader title="Реакция 1" @rgbCalculated="setRGB1" />
+        <ImageUploader title="Реакция 2" @rgbCalculated="setRGB2" />
 
-      <ImageUploader title="Реакция 2" @rgbCalculated="setRGB2" />
+        <div v-if="rgb1 && rgb2" class="rgb-block">
+          <h2>RGB параметры</h2>
+          <p class="note">Убедитесь в правильности извлечения цветовых компонент</p>
+          <div class="rgb-box">
+            <div class="rgb-box-1">
+              <div class="rgb-param">
+                <div>
+                  <p>R1: {{ rgb1.r }}</p>
+                  <p>G1: {{ rgb1.g }}</p>
+                  <p>B1: {{ rgb1.b }}</p>
+                </div>
+                <div
+                  class="color-preview"
+                  :style="{ background: `rgb(${rgb1.r},${rgb1.g},${rgb1.b})` }"
+                ></div>
+              </div>
+            </div>
 
-      <div v-if="rgb1 && rgb2">
-        <h2>RGB параметры</h2>
+            <div class="rgb-box-2">
+              <div class="rgb-param">
+                <div>
+                  <p>R2: {{ rgb2.r }}</p>
+                  <p>G2: {{ rgb2.g }}</p>
+                  <p>B2: {{ rgb2.b }}</p>
+                </div>
 
-        <p>R1: {{ rgb1.r }}</p>
-        <p>G1: {{ rgb1.g }}</p>
-        <p>B1: {{ rgb1.b }}</p>
-        <div
-          class="color-preview"
-          :style="{ background: `rgb(${rgb1.r},${rgb1.g},${rgb1.b})` }"
-        ></div>
+                <div
+                  class="color-preview"
+                  :style="{ background: `rgb(${rgb2.r},${rgb2.g},${rgb2.b})` }"
+                ></div>
+              </div>
+            </div>
+          </div>
 
-        <p>R2: {{ rgb2.r }}</p>
-        <p>G2: {{ rgb2.g }}</p>
-        <p>B2: {{ rgb2.b }}</p>
-        <div
-          class="color-preview"
-          :style="{ background: `rgb(${rgb2.r},${rgb2.g},${rgb2.b})` }"
-        ></div>
+          <RouterLink to="/new-analysis" class="reset-btn"> Сбросить </RouterLink>
+
+          <p v-if="errorMessage" class="error">
+            {{ errorMessage }}
+          </p>
+        </div>
       </div>
-      <p v-if="errorMessage" class="error">
-        {{ errorMessage }}
-      </p>
-
-      <button type="button" @click="runAnalysis">Провести анализ</button>
+      <button type="button" @click="runAnalysis">Определить вещество</button>
     </div>
 
     <!-- ЭКРАН 2 -->
@@ -63,9 +82,9 @@
         {{ concentrationPerimeter?.toFixed(3) }} г/л
       </p>
 
-      <button @click="saveAnalysis">Сохранить результат</button>
+      <button @click="saveAnalysis" class="btn-save">Сохранить результат</button>
 
-      <button @click="resetAnalysis">Новый анализ</button>
+      <button @click="resetAnalysis" class="btn-save">Новый анализ</button>
     </div>
   </div>
 </template>
@@ -202,3 +221,86 @@ async function saveAnalysis() {
   }
 }
 </script>
+
+<style scoped>
+.page {
+  background-color: white;
+  padding: 20px 40px;
+  margin: 20px;
+  border-radius: 30px;
+}
+
+h1 {
+  font-size: 30px;
+  margin-bottom: 20px;
+}
+
+.form-text::placeholder {
+  color: rgb(89, 89, 89);
+}
+
+button {
+  width: max-content;
+  padding: 6px 15px;
+  font-size: 17px;
+  margin-top: 10px;
+  background-color: rgb(121, 212, 194);
+  color: white;
+  border-radius: 30px;
+  border: 1px solid rgb(8, 163, 173);
+}
+button:hover {
+  transform: scale(1.1);
+  display: inline-block;
+}
+
+.reset-btn {
+  display: inline-block;
+  width: fit-content;
+  text-decoration: none;
+  border: 1px solid black;
+  color: black;
+  background-color: rgb(233, 233, 233);
+  padding: 2px 8px;
+  font-size: 15px;
+  margin-top: 100px;
+}
+.image-uploder {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  margin: 30px 0;
+  font-size: 17px;
+}
+.rgb-block {
+  margin: 20px 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: auto;
+  border: 1px solid rgb(222, 221, 221);
+}
+.note {
+  padding-bottom: 30px;
+  padding-top: 10px;
+}
+.rgb-box {
+  display: flex;
+  gap: 80px;
+}
+.rgb-param {
+  display: flex;
+  p {
+    padding-bottom: 10px;
+  }
+}
+.color-preview {
+  border-radius: 50%;
+  margin-bottom: 30px;
+  margin-left: 30px;
+}
+.btn-save {
+  margin-right: 10px;
+  margin-top: 5px;
+}
+</style>

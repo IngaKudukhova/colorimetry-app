@@ -24,6 +24,8 @@ const showNavbar = computed(() => {
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 40px;
+  font-size: 20px;
+  color: #333333;
+  background-color: rgb(235, 250, 248);
 }
 </style>

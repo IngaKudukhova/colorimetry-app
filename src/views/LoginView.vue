@@ -1,11 +1,17 @@
 <template>
   <div class="login-page">
     <div class="login-card">
-      <h1>Вход в систему</h1>
+      <img src="@/components/icons/logo.png" alt="" />
+      <!-- <h1>Вход в систему</h1> -->
 
-      <input v-model="username" type="text" placeholder="Логин" />
+      <input v-model="username" class="input-icon input-login" type="text" placeholder="Логин" />
 
-      <input v-model="password" type="password" placeholder="Пароль" />
+      <input
+        v-model="password"
+        class="input-icon input-pass"
+        type="password"
+        placeholder="Пароль"
+      />
 
       <button @click="login">Войти</button>
 
@@ -55,37 +61,69 @@ async function login() {
 
 <style scoped>
 .login-page {
+  background-color: rgb(121, 212, 194);
   display: flex;
-
   justify-content: center;
-
   align-items: center;
-
   min-height: 100vh;
 }
 
 .login-card {
   width: 300px;
-
+  background-color: white;
   display: flex;
-
+  height: 450px;
   flex-direction: column;
-
-  gap: 15px;
-
-  padding: 30px;
-
+  gap: 20px;
+  padding: 40px;
+  padding-top: 100px;
   border: 1px solid #ccc;
+  border-radius: 30px;
+  box-shadow: 5px 5px 20px;
 
-  border-radius: 10px;
+  img {
+    padding-bottom: 20px;
+  }
 }
 
 input {
-  padding: 10px;
+  color: rgb(8, 163, 173);
+  padding: 6px 10px;
+  border-radius: 30px;
+  border: 2px solid rgb(8, 163, 173);
+  background-color: #fff;
+}
+
+input::placeholder {
+  color: rgb(8, 163, 173);
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #fafafc inset; /* фон */
+  -webkit-text-fill-color: rgb(8, 163, 173); /* текст */
+}
+
+.input-icon {
+  background-repeat: no-repeat;
+  background-position: 10px center;
+  background-size: 20px 20px;
+  padding-left: 40px;
+}
+
+.input-login {
+  background-image: url('../components/icons/login.png');
+}
+
+.input-pass {
+  background-image: url('../components/icons/pass.png');
 }
 
 button {
-  padding: 10px;
+  padding: 8px 10px;
+  border-radius: 30px;
+  color: #fff;
+  background-color: rgb(121, 212, 194);
+  border: none;
 }
 
 .error {

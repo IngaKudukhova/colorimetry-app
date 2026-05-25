@@ -80,17 +80,31 @@ onMounted(() => {
 </script>
 
 <style scoped>
+h1 {
+  margin-top: 2px;
+  font-size: 35px;
+  margin-left: 27px;
+}
 .analysis-card {
   border: 1px solid #ccc;
-
+  background-color: white;
+  margin: 20px 20px;
   padding: 20px;
-
-  margin-bottom: 20px;
 
   border-radius: 10px;
 }
 
 button {
   margin-top: 10px;
+  padding: 5px 11px;
+  font-size: 17px;
+  background-color: rgb(121, 212, 194);
+  color: white;
+  border-radius: 30px;
+  border: 1px solid rgb(8, 163, 173);
+}
+button:hover {
+  transform: scale(1.1);
+  display: inline-block;
 }
 </style>

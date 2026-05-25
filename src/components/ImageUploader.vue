@@ -8,11 +8,9 @@
       <img :src="imageUrl" ref="image" @load="analyzeImage" />
     </div>
 
-    <div v-if="rgb">
-      <p>R: {{ rgb.r }}</p>
-      <p>G: {{ rgb.g }}</p>
-      <p>B: {{ rgb.b }}</p>
-    </div>
+    <!-- <div v-if="rgb">
+      <p>R: {{ rgb.r }}, G: {{ rgb.g }}, B: {{ rgb.b }}</p>
+    </div> -->
 
     <canvas ref="canvas" style="display: none"></canvas>
   </div>
@@ -90,7 +88,17 @@ function analyzeImage() {
 }
 
 .preview img {
-  max-width: 300px;
+  max-width: 170px;
   margin-top: 10px;
+}
+.preview img {
+  /* max-width: 250px;
+  max-height: 250px; */
+  object-fit: contain; /* сохраняет пропорции */
+}
+
+input[type='file'] {
+  margin-top: 10px;
+  font-size: 15px;
 }
 </style>

@@ -310,6 +310,7 @@ onMounted(() => {
 <style scoped>
 .page {
   padding: 20px;
+  margin-left: 10px;
 }
 
 .form-block {
@@ -343,7 +344,7 @@ button {
 }
 .substances-table {
   width: 100%;
-
+  background-color: white;
   border-collapse: collapse;
 
   margin-top: 20px;
@@ -365,5 +366,14 @@ hr {
   white-space: pre-line;
 
   max-width: 300px;
+}
+
+h1 {
+  margin-top: -10px;
+  margin-bottom: 5px;
+  font-size: 35px;
+}
+h2 {
+  font-size: 23px;
 }
 </style>
