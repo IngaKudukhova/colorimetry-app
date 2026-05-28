@@ -34,7 +34,6 @@ function createChart() {
 
       datasets: [
         {
-          label: 'RGB анализ',
           data: props.values,
 
           fill: true,
@@ -49,7 +48,11 @@ function createChart() {
 
     options: {
       responsive: true,
-
+      plugins: {
+        legend: {
+          display: false, // <-- отключаем легенду
+        },
+      },
       scales: {
         r: {
           min: 0,
@@ -81,7 +84,7 @@ watch(
 
 <style scoped>
 .chart-container {
-  width: 500px;
+  width: 420px;
   margin: auto;
 }
 </style>

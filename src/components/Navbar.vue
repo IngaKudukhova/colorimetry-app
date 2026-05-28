@@ -8,9 +8,9 @@
     </div> -->
     <div class="left">
       <RouterLink to="/new-analysis"> Анализ концентрации </RouterLink>
-      <RouterLink to="/history"> Качественный анализ </RouterLink>
+      <router-link to="/qualitative-analysis"> Качественный анализ </router-link>
       <RouterLink to="/history"> История </RouterLink>
-      <RouterLink to="/history"> Справочник </RouterLink>
+      <RouterLink to="/manual"> Справочник </RouterLink>
       <RouterLink v-if="user.role === 'admin'" to="/admin/substances"> Вещества </RouterLink>
       <RouterLink v-if="user.role === 'admin'" to="/admin/users"> Пользователи </RouterLink>
     </div>
@@ -86,7 +86,7 @@ function logout() {
   display: flex;
   align-items: center;
   margin-right: 10px;
-  gap: 10px;
+  gap: 15px;
   span {
     font-size: 17px;
   }
@@ -120,7 +120,7 @@ button:hover {
   display: inline-block;
   width: 16px;
   height: 16px;
-  background: url('@/components/icons/free.svg');
+  background: url('../components/icons/free.svg');
   margin-right: 8px;
   vertical-align: middle;
 } */

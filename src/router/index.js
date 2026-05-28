@@ -2,11 +2,12 @@ import AdminSubstancesView from '../views/AdminSubstancesView.vue'
 
 import { createRouter, createWebHistory } from 'vue-router'
 
-import Dashboard from '../views/Dashboard.vue'
+import ManualView from '../views/ManualView.vue'
 import NewAnalysis from '../views/NewAnalysis.vue'
 import HistoryView from '../views/HistoryView.vue'
 import LoginView from '../views/LoginView.vue'
 import AdminUsersView from '../views/AdminUsersView.vue'
+import QualitativeAnalysisView from '../views/QualitativeAnalysisView.vue'
 
 const routes = [
   {
@@ -18,8 +19,8 @@ const routes = [
     component: AdminSubstancesView,
   },
   {
-    path: '/dashboard',
-    component: Dashboard,
+    path: '/manual',
+    component: ManualView,
   },
   {
     path: '/new-analysis',
@@ -38,6 +39,10 @@ const routes = [
   {
     path: '/admin/users',
     component: AdminUsersView,
+  },
+  {
+    path: '/qualitative-analysis',
+    component: QualitativeAnalysisView,
   },
 ]
 

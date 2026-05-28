@@ -68,22 +68,93 @@ def predict():
             'message': 'Unknown group'
         }), 400
     
+    print(X)
+
+    print(X.columns)
+
+    print(model.feature_names_in_)
+
     prediction = model.predict(X)[0]
+
+    distances, indices = model.kneighbors(X)
+
+    nearest_distance = distances[0][0]
+
+    print('Distance:', nearest_distance)
+
+    threshold = 0.25
+
+    if nearest_distance > threshold:
+
+        return jsonify({
+
+            'substance': 'Unknown substance',
+
+            'confidence': 0,
+
+            'distance': nearest_distance,
+
+            'modelProfile': None
+        })
+
+    if group == 'amino':
+
+        df = pd.read_csv(
+            'datasets/amino.csv'
+        )
+
+    else:
+
+        df = pd.read_csv(
+            'datasets/phenols.csv'
+        )
+
+    substance_rows = df[
+        df['substance'] == prediction
+    ]
+
+    model_profile = {
+
+        'r1': substance_rows['r1'].mean(),
+
+        'g1': substance_rows['g1'].mean(),
+
+        'b1': substance_rows['b1'].mean(),
+
+        'r2': substance_rows['r2'].mean(),
+
+        'g2': substance_rows['g2'].mean(),
+
+        'b2': substance_rows['b2'].mean(),
+    }
 
     probabilities = model.predict_proba(X)[0]
 
-    confidence = max(probabilities)
+    confidence = max(
+        0,
+        1 - nearest_distance
+    )
 
     return jsonify({
 
         'substance': prediction,
 
-        'confidence': round(
-            float(confidence),
-            2
-        )
+        'confidence': confidence,
 
+        'modelProfile': model_profile
     })
+
+    # return jsonify({
+
+    #     'substance': prediction,
+
+    #     'confidence': round(
+    #         float(confidence),
+    #         2
+    #     )
+    #     'modelProfile': model_profile
+    # })
+
 
 if __name__ == '__main__':
 

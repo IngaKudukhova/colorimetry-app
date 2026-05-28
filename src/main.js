@@ -7,6 +7,7 @@ import router from './router'
 
 import vSelect from 'vue3-select'
 import 'vue3-select/dist/vue3-select.css'
+import './assets/analysis.css'
 
 const app = createApp(App)
 

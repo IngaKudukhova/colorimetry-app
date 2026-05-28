@@ -9,6 +9,7 @@ const cors = require('cors')
 const substanceRoutes = require('./routes/substanceRoutes')
 const analysisRoutes = require('./routes/analysisRoutes')
 const authRoutes = require('./routes/authRoutes')
+const mlRoutes = require('./routes/ml')
 
 const app = express()
 
@@ -29,6 +30,8 @@ app.use('/substances', substanceRoutes)
 app.use('/analyses', analysisRoutes)
 
 app.use('/users', userRoutes)
+
+app.use('/ml', mlRoutes)
 
 async function startServer() {
   try {

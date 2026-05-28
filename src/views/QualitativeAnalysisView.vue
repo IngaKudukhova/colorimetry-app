@@ -1,0 +1,255 @@
+<template>
+  <div class="page">
+    <!-- ЭКРАН 1 -->
+
+    <div v-if="!analysisDone">
+      <h1>Качественный анализ</h1>
+
+      <div class="form-block">
+        <label>Выберите группу веществ</label>
+
+        <select v-model="selectedGroup">
+          <option disabled value="">Выберите группу</option>
+
+          <option value="amino">Аминокислоты</option>
+
+          <option value="phenols">Фенолы</option>
+        </select>
+      </div>
+      <div class="image-uploder">
+        <ImageUploader title="Реакция 1" @rgbCalculated="setRGB1" />
+
+        <ImageUploader title="Реакция 2" @rgbCalculated="setRGB2" />
+
+        <div v-if="rgb1 && rgb2" class="rgb-block">
+          <h2>RGB параметры</h2>
+          <p class="note">Убедитесь в правильности извлечения цветовых компонент</p>
+          <div class="rgb-box">
+            <div class="rgb-box-1">
+              <div class="rgb-param">
+                <div>
+                  <p>R1: {{ rgb1.r }}</p>
+                  <p>G1: {{ rgb1.g }}</p>
+                  <p>B1: {{ rgb1.b }}</p>
+                </div>
+                <div
+                  class="color-preview"
+                  :style="{
+                    background: `rgb(${rgb1.r},${rgb1.g},${rgb1.b})`,
+                  }"
+                ></div>
+              </div>
+            </div>
+            <div class="rgb-box-2">
+              <div class="rgb-param">
+                <div>
+                  <p>R2: {{ rgb2.r }}</p>
+                  <p>G2: {{ rgb2.g }}</p>
+                  <p>B2: {{ rgb2.b }}</p>
+                </div>
+                <div
+                  class="color-preview"
+                  :style="{
+                    background: `rgb(${rgb2.r},${rgb2.g},${rgb2.b})`,
+                  }"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p v-if="errorMessage" class="error">
+        {{ errorMessage }}
+      </p>
+
+      <button type="button" @click="runPrediction">Провести анализ</button>
+    </div>
+
+    <!-- ЭКРАН 2 -->
+
+    <div v-else>
+      <h2>Результаты анализа</h2>
+      <div class="radar-charts">
+        <div class="radar-chart-box">
+          <h3>Профиль образца</h3>
+
+          <RadarChart :values="chartValues" />
+        </div>
+        <div class="radar-chart-box">
+          <h3>Модельный профиль</h3>
+
+          <RadarChart :values="modelChartValues" />
+        </div>
+      </div>
+
+      <p class="result">
+        Определённое вещество:
+        <strong>
+          {{ prediction }}
+        </strong>
+      </p>
+
+      <p>
+        Степень уверенности:
+        <strong> {{ confidencePercent }}% </strong>
+      </p>
+
+      <button @click="resetAnalysis">Новый анализ</button>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed } from 'vue'
+
+import api from '../api/axios'
+
+import ImageUploader from '../components/ImageUploader.vue'
+
+import RadarChart from '../components/RadarChart.vue'
+
+const selectedGroup = ref('')
+
+const rgb1 = ref(null)
+
+const rgb2 = ref(null)
+
+const prediction = ref('')
+
+const confidence = ref(null)
+
+const modelProfile = ref(null)
+
+const errorMessage = ref('')
+
+const analysisDone = ref(false)
+
+function setRGB1(data) {
+  rgb1.value = data
+}
+
+function setRGB2(data) {
+  rgb2.value = data
+}
+
+const chartValues = computed(() => {
+  if (!rgb1.value || !rgb2.value) {
+    return []
+  }
+
+  return [rgb1.value.r, rgb1.value.g, rgb1.value.b, rgb2.value.r, rgb2.value.g, rgb2.value.b]
+})
+
+const modelChartValues = computed(() => {
+  if (!modelProfile.value) {
+    return []
+  }
+
+  return [
+    modelProfile.value.r1,
+    modelProfile.value.g1,
+    modelProfile.value.b1,
+
+    modelProfile.value.r2,
+    modelProfile.value.g2,
+    modelProfile.value.b2,
+  ]
+})
+
+const confidencePercent = computed(() => {
+  if (!confidence.value) {
+    return 0
+  }
+
+  return Math.round(confidence.value * 100)
+})
+
+async function runPrediction() {
+  if (!selectedGroup.value) {
+    errorMessage.value = 'Пожалуйста, выберите группу веществ'
+
+    return
+  }
+
+  if (!rgb1.value || !rgb2.value) {
+    errorMessage.value = 'Пожалуйста, загрузите оба изображения'
+
+    return
+  }
+
+  errorMessage.value = ''
+
+  try {
+    const response = await api.post(
+      '/ml/predict',
+
+      {
+        group: selectedGroup.value,
+
+        r1: rgb1.value.r,
+        g1: rgb1.value.g,
+        b1: rgb1.value.b,
+
+        r2: rgb2.value.r,
+        g2: rgb2.value.g,
+        b2: rgb2.value.b,
+      },
+    )
+
+    prediction.value = response.data.substance
+
+    confidence.value = response.data.confidence
+
+    modelProfile.value = response.data.modelProfile
+
+    analysisDone.value = true
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+function resetAnalysis() {
+  selectedGroup.value = ''
+
+  rgb1.value = null
+
+  rgb2.value = null
+
+  prediction.value = ''
+
+  confidence.value = null
+
+  modelProfile.value = null
+
+  errorMessage.value = ''
+
+  analysisDone.value = false
+}
+</script>
+
+<style scoped>
+.radar-charts {
+  display: flex;
+  justify-content: space-around;
+}
+.radar-chart-box {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+}
+h2 {
+  font-size: 25px;
+  text-align: center;
+  padding-bottom: 20px;
+}
+h3 {
+  font-size: 20px;
+  text-align: center;
+}
+.chart-container {
+  width: 380px;
+}
+.result {
+  padding-top: 10px;
+}
+</style>
