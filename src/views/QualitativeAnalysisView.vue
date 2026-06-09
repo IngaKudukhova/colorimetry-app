@@ -3,7 +3,7 @@
     <!-- ЭКРАН 1 -->
 
     <div v-if="!analysisDone">
-      <h1>Качественный анализ</h1>
+      <h1 class="h1">Качественный анализ</h1>
 
       <div class="form-block">
         <label>Выберите группу веществ</label>
@@ -17,12 +17,12 @@
         </select>
       </div>
       <div class="image-uploder">
-        <ImageUploader title="Реакция 1" @rgbCalculated="setRGB1" />
+        <ImageUploader title="Реакция 1" class="uploder-title" @rgbCalculated="setRGB1" />
 
-        <ImageUploader title="Реакция 2" @rgbCalculated="setRGB2" />
+        <ImageUploader title="Реакция 2" class="uploder-title" @rgbCalculated="setRGB2" />
 
         <div v-if="rgb1 && rgb2" class="rgb-block">
-          <h2>RGB параметры</h2>
+          <h2 class="h2">RGB параметры</h2>
           <p class="note">Убедитесь в правильности извлечения цветовых компонент</p>
           <div class="rgb-box">
             <div class="rgb-box-1">
@@ -68,15 +68,15 @@
     <!-- ЭКРАН 2 -->
 
     <div v-else>
-      <h2>Результаты анализа</h2>
+      <h2 class="h1">Результаты анализа</h2>
       <div class="radar-charts">
         <div class="radar-chart-box">
-          <h3>Профиль образца</h3>
+          <h3 class="h3">Профиль образца</h3>
 
           <RadarChart :values="chartValues" />
         </div>
         <div class="radar-chart-box">
-          <h3>Модельный профиль</h3>
+          <h3 class="h3">Модельный профиль</h3>
 
           <RadarChart :values="modelChartValues" />
         </div>
@@ -101,27 +101,17 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-
 import api from '../api/axios'
-
 import ImageUploader from '../components/ImageUploader.vue'
-
 import RadarChart from '../components/RadarChart.vue'
 
 const selectedGroup = ref('')
-
 const rgb1 = ref(null)
-
 const rgb2 = ref(null)
-
 const prediction = ref('')
-
 const confidence = ref(null)
-
 const modelProfile = ref(null)
-
 const errorMessage = ref('')
-
 const analysisDone = ref(false)
 
 function setRGB1(data) {
@@ -228,6 +218,9 @@ function resetAnalysis() {
 </script>
 
 <style scoped>
+.note {
+  margin-bottom: 30px;
+}
 .radar-charts {
   display: flex;
   justify-content: space-around;
@@ -235,7 +228,6 @@ function resetAnalysis() {
 .radar-chart-box {
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
 }
 h2 {
   font-size: 25px;
@@ -251,5 +243,103 @@ h3 {
 }
 .result {
   padding-top: 10px;
+}
+.image-uploder {
+  margin-top: 15px;
+}
+.form-block {
+  label {
+    margin-bottom: 5px;
+  }
+  select {
+    padding: 6px;
+    border: 1px solid rgb(194, 192, 192);
+    color: rgb(53, 53, 53);
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 450px) {
+  .page {
+    padding: 20px;
+    margin: 10px;
+  }
+
+  .image-uploder {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 18px;
+  }
+
+  .uploader {
+    margin: 5px 0px;
+    padding-top: 15px;
+  }
+  .form-block {
+    font-size: 18px;
+    label {
+      margin-bottom: 10px;
+    }
+  }
+  .h1 {
+    font-size: 22px !important;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+
+  .h2 {
+    font-size: 18px !important;
+  }
+
+  .h3 {
+    font-size: 18px !important;
+  }
+
+  p {
+    font-size: 16px !important;
+  }
+  button {
+    padding: 4px 10px;
+    font-size: 16px;
+  }
+  .uploder-title {
+    font-size: 16px;
+  }
+  .radar-charts {
+    flex-direction: column;
+  }
+  .chart-container {
+    width: auto;
+    margin: 10px 0px;
+  }
+  .rgb-block {
+    .h2 {
+      padding-bottom: 0px;
+      text-align: center;
+    }
+    align-items: center;
+  }
+  .note {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .rgb-box {
+    flex-direction: row;
+    gap: 20px;
+  }
+  .rgb-param {
+    gap: 8px;
+  }
+  .rgb-param {
+    p {
+      padding-bottom: 3px;
+    }
+  }
+
+  .color-preview {
+    margin: auto;
+  }
 }
 </style>

@@ -1,88 +1,104 @@
 <template>
   <div class="page">
-    <h1>Управление веществами</h1>
+    <h1 class="h1">Управление веществами</h1>
 
-    <div class="form-block">
-      <h2>Добавить вещество</h2>
+    <div class="form-box">
+      <div class="form-block">
+        <h2 class="h2">Добавить новое вещество</h2>
 
-      <input v-model="form.name" placeholder="Название вещества" />
+        <p class="equation-hint">Укажите название</p>
 
-      <h3>Формула площади</h3>
+        <input v-model="form.name" placeholder="Введите название" />
+        <button @click="createSubstance" class="save-button">Сохранить</button>
 
-      <p class="equation-hint">
-        {{ getEquationHint(form.areaEquation.type) }}
-      </p>
+        <p v-if="validationError" class="error">Пожалуйста, заполните все поля</p>
 
-      <select v-model="form.areaEquation.type">
-        <option value="linear">Линейное</option>
+        <p v-if="successMessage">
+          {{ successMessage }}
+        </p>
 
-        <option value="power">Степенное</option>
+        <p v-if="errorMessage" class="error">
+          {{ errorMessage }}
+        </p>
+      </div>
 
-        <option value="polynomial">Полиномиальное</option>
+      <div class="form-block">
+        <h3 class="h3">Формула площади</h3>
 
-        <option value="exponential">Экспоненциальное</option>
-      </select>
+        <p class="equation-hint">
+          {{ getEquationHint(form.areaEquation.type) }}
+        </p>
 
-      <input v-model.number="form.areaEquation.a" placeholder="Коэффициент a" type="number" />
+        <select v-model="form.areaEquation.type">
+          <option value="linear">Линейное</option>
 
-      <input v-model.number="form.areaEquation.b" placeholder="Коэффициент b" type="number" />
+          <option value="power">Степенное</option>
 
-      <input
-        v-if="form.areaEquation.type === 'polynomial'"
-        v-model.number="form.areaEquation.c"
-        placeholder="Коэффициент c"
-        type="number"
-      />
+          <option value="polynomial">Полиномиальное</option>
 
-      <input v-model.number="form.areaEquation.r2" placeholder="R²" type="number" step="0.0001" />
+          <option value="exponential">Экспоненциальное</option>
+        </select>
 
-      <h3>Формула периметра</h3>
+        <input v-model.number="form.areaEquation.a" placeholder="Коэффициент a" type="number" />
 
-      <p class="equation-hint">
-        {{ getEquationHint(form.perimeterEquation.type) }}
-      </p>
+        <input v-model.number="form.areaEquation.b" placeholder="Коэффициент b" type="number" />
 
-      <select v-model="form.perimeterEquation.type">
-        <option value="linear">Линейное</option>
+        <input
+          v-if="form.areaEquation.type === 'polynomial'"
+          v-model.number="form.areaEquation.c"
+          placeholder="Коэффициент c"
+          type="number"
+        />
 
-        <option value="power">Степенное</option>
+        <input v-model.number="form.areaEquation.r2" placeholder="R²" type="number" step="0.0001" />
+      </div>
+      <div class="form-block">
+        <h3 class="h3">Формула периметра</h3>
 
-        <option value="polynomial">Полиномиальное</option>
+        <p class="equation-hint">
+          {{ getEquationHint(form.perimeterEquation.type) }}
+        </p>
 
-        <option value="exponential">Экспоненциальное</option>
-      </select>
+        <select v-model="form.perimeterEquation.type">
+          <option value="linear">Линейное</option>
 
-      <input v-model.number="form.perimeterEquation.a" placeholder="Коэффициент a" type="number" />
+          <option value="power">Степенное</option>
 
-      <input v-model.number="form.perimeterEquation.b" placeholder="Коэффициент b" type="number" />
+          <option value="polynomial">Полиномиальное</option>
 
-      <input
-        v-if="form.perimeterEquation.type === 'polynomial'"
-        v-model.number="form.perimeterEquation.c"
-        placeholder="Коэффициент c"
-        type="number"
-      />
+          <option value="exponential">Экспоненциальное</option>
+        </select>
 
-      <input
-        v-model.number="form.perimeterEquation.r2"
-        placeholder="R²"
-        type="number"
-        step="0.0001"
-      />
+        <input
+          v-model.number="form.perimeterEquation.a"
+          placeholder="Коэффициент a"
+          type="number"
+        />
 
-      <button @click="createSubstance">Сохранить</button>
+        <input
+          v-model.number="form.perimeterEquation.b"
+          placeholder="Коэффициент b"
+          type="number"
+        />
 
-      <p v-if="successMessage">
-        {{ successMessage }}
-      </p>
+        <input
+          v-if="form.perimeterEquation.type === 'polynomial'"
+          v-model.number="form.perimeterEquation.c"
+          placeholder="Коэффициент c"
+          type="number"
+        />
 
-      <p v-if="errorMessage" class="error">
-        {{ errorMessage }}
-      </p>
+        <input
+          v-model.number="form.perimeterEquation.r2"
+          placeholder="R²"
+          type="number"
+          step="0.0001"
+        />
+      </div>
     </div>
     <hr />
 
-    <h2>Список веществ</h2>
+    <h2 class="h2">Список веществ</h2>
 
     <input v-model="search" placeholder="Поиск вещества" />
 
@@ -225,6 +241,26 @@ const successMessage = ref('')
 
 const errorMessage = ref('')
 
+const validationError = ref(false)
+
+function isFormValid() {
+  const eq = (equation) => {
+    const base =
+      form.name.trim() !== '' &&
+      equation.a !== null &&
+      equation.a !== '' &&
+      equation.b !== null &&
+      equation.b !== '' &&
+      equation.r2 !== null &&
+      equation.r2 !== ''
+    if (equation.type === 'polynomial') {
+      return base && equation.c !== null && equation.c !== ''
+    }
+    return base
+  }
+  return eq(form.areaEquation) && eq(form.perimeterEquation)
+}
+
 const form = reactive({
   name: '',
 
@@ -254,6 +290,13 @@ const form = reactive({
 })
 
 async function createSubstance() {
+  validationError.value = false
+
+  if (!isFormValid()) {
+    validationError.value = true
+    return
+  }
+
   try {
     errorMessage.value = ''
 
@@ -308,40 +351,32 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.page {
-  padding: 20px;
-  margin-left: 10px;
-}
-
 .form-block {
   display: flex;
-
   flex-direction: column;
-
   gap: 10px;
-
-  max-width: 400px;
+  max-width: 500px;
+  flex-grow: 1;
 }
 
+.save-button {
+  margin-top: auto;
+}
 input,
 select {
-  padding: 10px;
+  padding: 5px 10px;
 }
 
 button {
-  padding: 10px;
+  padding: 4px 10px;
 }
 
-.error {
-  color: red;
-}
 .equation-hint {
   font-style: italic;
-
   color: #666;
-
   margin-bottom: 10px;
 }
+
 .substances-table {
   width: 100%;
   background-color: white;
@@ -364,16 +399,66 @@ hr {
 }
 .equation-cell {
   white-space: pre-line;
-
-  max-width: 300px;
+  max-width: 500px;
 }
 
 h1 {
   margin-top: -10px;
   margin-bottom: 5px;
-  font-size: 35px;
+  font-size: 20px;
 }
 h2 {
-  font-size: 23px;
+  font-size: 22px;
+  margin-bottom: 5px;
+}
+h3 {
+  font-size: 22px;
+}
+
+.form-box {
+  display: flex;
+  flex-direction: row;
+  gap: 100px;
+  justify-content: space-between;
+}
+
+@media (max-width: 450px) {
+  .form-box {
+    flex-direction: column;
+    gap: 15px;
+  }
+  .page {
+    padding: 20px;
+    margin: 10px;
+  }
+
+  .h1 {
+    font-size: 22px !important;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+
+  .h2 {
+    font-size: 18px !important;
+  }
+
+  .h3 {
+    font-size: 18px !important;
+  }
+  .substances-table {
+    font-size: 16px;
+  }
+
+  p {
+    font-size: 16px !important;
+  }
+  button {
+    padding: 4px 10px;
+    font-size: 16px;
+  }
+  hr {
+    margin: 5px;
+    margin-bottom: 15px;
+  }
 }
 </style>

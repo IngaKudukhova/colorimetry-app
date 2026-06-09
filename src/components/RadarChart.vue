@@ -87,4 +87,11 @@ watch(
   width: 420px;
   margin: auto;
 }
+
+@media (max-width: 450px) {
+  .chart-container {
+    width: auto;
+    margin: 10px 0px;
+  }
+}
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <div v-if="!analysisDone">
-      <h1>Новый анализ</h1>
+      <h1 class="h1">Количественный анализ</h1>
 
       <div class="form-block">
         <label>Выберите вещество</label>
@@ -15,12 +15,12 @@
         />
       </div>
       <div class="image-uploder">
-        <ImageUploader title="Реакция 1" @rgbCalculated="setRGB1" />
+        <ImageUploader title="Реакция 1" class="uploder-title" @rgbCalculated="setRGB1" />
 
-        <ImageUploader title="Реакция 2" @rgbCalculated="setRGB2" />
+        <ImageUploader title="Реакция 2" class="uploder-title" @rgbCalculated="setRGB2" />
 
         <div v-if="rgb1 && rgb2" class="rgb-block">
-          <h2>RGB параметры</h2>
+          <h2 class="h2">RGB параметры</h2>
           <p class="note">Убедитесь в правильности извлечения цветовых компонент</p>
           <div class="rgb-box">
             <div class="rgb-box-1">
@@ -62,7 +62,7 @@
 
     <!-- ЭКРАН 2 -->
     <div v-else>
-      <h2>Результаты анализа</h2>
+      <h2 class="h2">Результаты анализа</h2>
 
       <RadarChart :values="chartValues" />
 
@@ -219,4 +219,88 @@ async function saveAnalysis() {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+:deep(.vs__search::placeholder) {
+  color: rgb(89, 89, 89);
+  font-size: 16px;
+}
+@media (max-width: 450px) {
+  .page {
+    padding: 20px;
+    margin: 10px;
+  }
+
+  .image-uploder {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 18px;
+  }
+
+  .uploader {
+    margin: 5px 0px;
+    padding-top: 15px;
+  }
+  .form-block {
+    label {
+      margin-bottom: 10px;
+    }
+  }
+  .h1 {
+    font-size: 22px !important;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+
+  .h2 {
+    font-size: 18px !important;
+  }
+
+  .h3 {
+    font-size: 18px !important;
+  }
+
+  p {
+    font-size: 16px !important;
+  }
+  button {
+    padding: 4px 10px;
+    font-size: 16px;
+  }
+  .uploder-title {
+    font-size: 16px;
+  }
+
+  .rgb-block {
+    .h2 {
+      padding-bottom: 0px;
+      text-align: center;
+    }
+    align-items: center;
+  }
+  .note {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .rgb-box {
+    flex-direction: row;
+    gap: 20px;
+  }
+  .rgb-param {
+    gap: 8px;
+  }
+  .rgb-param {
+    p {
+      padding-bottom: 3px;
+    }
+  }
+
+  .color-preview {
+    margin: auto;
+  }
+  .btn-save {
+    margin-top: 10px;
+  }
+}
+</style>

@@ -1,9 +1,9 @@
 <template>
   <div class="page">
-    <h1>История анализов</h1>
+    <h1 class="h1">История анализов</h1>
 
     <div v-for="analysis in analyses" :key="analysis._id" class="analysis-card">
-      <h3>{{ analysis.substance }}</h3>
+      <h3 class="h3">{{ analysis.substance }}</h3>
 
       <p>
         Дата:
@@ -82,29 +82,41 @@ onMounted(() => {
 <style scoped>
 h1 {
   margin-top: 2px;
-  font-size: 35px;
-  margin-left: 27px;
+  font-size: 20px;
 }
-.analysis-card {
-  border: 1px solid #ccc;
-  background-color: white;
-  margin: 20px 20px;
-  padding: 20px;
-
-  border-radius: 10px;
+h3 {
+  margin-bottom: 5px;
+  font-size: 20px;
+}
+p {
+  font-size: 18px;
 }
 
-button {
-  margin-top: 10px;
-  padding: 5px 11px;
-  font-size: 17px;
-  background-color: rgb(121, 212, 194);
-  color: white;
-  border-radius: 30px;
-  border: 1px solid rgb(8, 163, 173);
-}
-button:hover {
-  transform: scale(1.1);
-  display: inline-block;
+@media (max-width: 450px) {
+  .page {
+    padding: 20px;
+    margin: 10px;
+  }
+  .analysis-card {
+    margin: 12px 0;
+    padding: 15px;
+  }
+  .h1 {
+    font-size: 20px !important;
+    margin-bottom: 0px;
+    text-align: center;
+  }
+
+  .h3 {
+    font-size: 18px !important;
+  }
+
+  p {
+    font-size: 16px !important;
+  }
+  button {
+    padding: 4px 10px;
+    font-size: 16px;
+  }
 }
 </style>

@@ -1,11 +1,11 @@
 <template>
   <div class="page">
-    <h1>Управление пользователями</h1>
+    <h1 class="h1">Управление пользователями</h1>
 
     <!-- ФОРМА -->
 
     <div class="form-block">
-      <h2>Создать пользователя</h2>
+      <h2 class="h2">Создать пользователя</h2>
 
       <input v-model="form.username" placeholder="Логин" />
 
@@ -36,7 +36,7 @@
 
     <!-- ТАБЛИЦА -->
 
-    <h2>Пользователи</h2>
+    <h2 class="h2">Пользователи</h2>
 
     <table class="users-table">
       <thead>
@@ -179,10 +179,9 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.page {
-  padding: 20px;
+h2 {
+  font-size: 22px;
 }
-
 .form-block {
   display: flex;
 
@@ -195,7 +194,7 @@ onMounted(() => {
 
 input,
 select {
-  padding: 10px;
+  padding: 5px 10px;
   background-color: white;
 }
 
@@ -204,7 +203,7 @@ input:-webkit-autofill {
 }
 
 button {
-  padding: 10px;
+  padding: 5px 10px;
 }
 
 .users-table {
@@ -224,11 +223,47 @@ button {
   text-align: left;
 }
 
-.error {
-  color: red;
-}
-
 hr {
   margin: 40px 0;
+}
+
+@media (max-width: 450px) {
+  .form-box {
+    flex-direction: column;
+    gap: 15px;
+  }
+  .page {
+    padding: 20px;
+    margin: 10px;
+  }
+
+  .h1 {
+    font-size: 22px !important;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+
+  .h2 {
+    font-size: 18px !important;
+  }
+
+  .h3 {
+    font-size: 18px !important;
+  }
+  .users-table {
+    font-size: 16px;
+  }
+
+  p {
+    font-size: 16px !important;
+  }
+  button {
+    padding: 4px 10px;
+    font-size: 16px;
+  }
+  hr {
+    margin: 5px;
+    margin-bottom: 10px;
+  }
 }
 </style>

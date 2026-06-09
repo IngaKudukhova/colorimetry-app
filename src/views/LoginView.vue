@@ -124,6 +124,7 @@ button {
   color: #fff;
   background-color: rgb(121, 212, 194);
   border: none;
+  width: auto;
 }
 
 .error {

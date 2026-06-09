@@ -8,10 +8,6 @@
       <img :src="imageUrl" ref="image" @load="analyzeImage" />
     </div>
 
-    <!-- <div v-if="rgb">
-      <p>R: {{ rgb.r }}, G: {{ rgb.g }}, B: {{ rgb.b }}</p>
-    </div> -->
-
     <canvas ref="canvas" style="display: none"></canvas>
   </div>
 </template>
@@ -88,14 +84,16 @@ function analyzeImage() {
 }
 
 .preview img {
-  max-width: 170px;
+  max-width: 250px;
   margin-top: 10px;
+  object-fit: cover;
+  object-position: center;
 }
-.preview img {
-  /* max-width: 250px;
-  max-height: 250px; */
-  object-fit: contain; /* сохраняет пропорции */
-}
+/* .preview img {
+  max-width: 250px;
+  max-height: 250px;
+  object-fit: contain;
+} */
 
 input[type='file'] {
   margin-top: 10px;

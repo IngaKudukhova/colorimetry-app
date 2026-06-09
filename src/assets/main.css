@@ -1,5 +1,9 @@
 @import './base.css';
 
+body {
+  color: #333333;
+}
+
 .analysis-page {
   max-width: 500px;
   margin: auto;
@@ -10,13 +14,22 @@ label {
   margin-bottom: 5px;
 }
 
-.form-block {
-  margin-bottom: 20px;
+button {
+  width: max-content;
+  padding: 6px 15px;
+  font-size: 17px;
+  margin-top: 10px;
+  background-color: rgb(121, 212, 194);
+  color: white;
+  border-radius: 30px;
+  border: 1px solid rgb(121, 212, 194);
 }
 
-.color-preview {
-  width: 60px;
-  height: 60px;
-  border: 1px solid #444;
-  margin-top: 10px;
+button:hover {
+  transform: scale(1.1);
+  display: inline-block;
+}
+
+.error {
+  color: red;
 }
