@@ -83,7 +83,7 @@
       </div>
 
       <p class="result">
-        Определённое вещество:
+        Определенное вещество:
         <strong>
           {{ prediction }}
         </strong>
